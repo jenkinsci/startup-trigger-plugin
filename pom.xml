@@ -20,15 +20,15 @@
 
   <url>http://wiki.hudson-ci.org/display/HUDSON/Hudson+Startup+Trigger</url>
  
-  <contributors>
-    <contributor>
+  <developers>
+    <developer>
       <id>ashlux</id>
       <name>Ash Lux</name>
       <email>ashlux@gmail.com</email>
       <url>http://www.ashlux.com/</url>
       <timezone>-5</timezone>
-    </contributor>
-  </contributors>
+    </developer>
+  </developers>
 
   <dependencies>
     <dependency>
