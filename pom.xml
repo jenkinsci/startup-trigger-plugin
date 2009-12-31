@@ -18,9 +18,12 @@
   <packaging>hpi</packaging>
   <name>Hudson Startup Trigger</name>
 
+  <url>http://wiki.hudson-ci.org/display/HUDSON/Hudson+Startup+Trigger</url>
+ 
   <contributors>
     <contributor>
-      <name>ashlux</name>
+      <id>ashlux</id>
+      <name>Ash Lux</name>
       <email>ashlux@gmail.com</email>
       <url>http://www.ashlux.com/</url>
       <timezone>-5</timezone>
