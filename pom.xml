@@ -12,7 +12,7 @@
 
   <groupId>${parent.groupId}</groupId>
   <artifactId>startup-trigger-plugin</artifactId>
-  <version>0.2</version>
+  <version>0.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <name>Startup Trigger</name>
 
@@ -36,10 +36,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/startup-trigger-plugin-0.2</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/startup-trigger-plugin-0.2</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/tags/startup-trigger-plugin-0.2</url>
-  </scm>
 </project>
