@@ -12,7 +12,7 @@
 
   <groupId>${parent.groupId}</groupId>
   <artifactId>startup-trigger-plugin</artifactId>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <name>Startup Trigger</name>
 
