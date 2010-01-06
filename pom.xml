@@ -5,18 +5,18 @@
 
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
-    <artifactId>plugin</artifactId>
+    <artifactId>plugin</artifactId>   
     <version>1.339</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>${parent.groupId}</groupId>
-  <artifactId>hudson-startup-trigger</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <artifactId>startup-trigger-plugin</artifactId>
+  <version>0.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
-  <name>Hudson Startup Trigger</name>
+  <name>Startup Trigger</name>
 
-  <url>http://wiki.hudson-ci.org/display/HUDSON/Hudson+Startup+Trigger</url>
+  <url>http://wiki.hudson-ci.org/display/HUDSON/Startup+Trigger</url>
  
   <developers>
     <developer>
