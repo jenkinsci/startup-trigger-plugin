@@ -8,6 +8,6 @@ public class HudsonStartupCause
     @Override
     public String getShortDescription()
     {
-        return "Started due to Hudson startup.";
+        return "Started due to Jenkins startup.";
     }
 }

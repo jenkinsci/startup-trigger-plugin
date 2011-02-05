@@ -22,7 +22,7 @@ public class HudsonStartupDescriptor
     @Override
     public String getDisplayName()
     {
-        return "Build when Hudson first starts";
+        return "Build when Jenkins first starts";
     }
 
     @Override
