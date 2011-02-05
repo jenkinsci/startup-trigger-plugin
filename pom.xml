@@ -16,7 +16,7 @@
   <packaging>hpi</packaging>
   <name>Startup Trigger</name>
 
-  <url>http://wiki.hudson-ci.org/display/HUDSON/Startup+Trigger</url>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger</url>
  
   <developers>
     <developer>
@@ -36,4 +36,16 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+ <scm>
+   <connection>scm:git:https://github.com/jenkinsci/startup-trigger-plugin-plugin.git</connection>
+   <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin-plugin.git</developerConnection>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>java.net-m2-repository</id>
+      <url>http://maven.hudson-labs.org:8081/content/repositories/releases/</url>
+    </repository>
+  </distributionManagement>
 </project>
