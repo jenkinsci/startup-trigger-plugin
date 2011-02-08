@@ -4,15 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.jvnet.hudson.plugins</groupId>
+    <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>   
-    <version>1.339</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>1.396</version>
   </parent>
 
   <groupId>${parent.groupId}</groupId>
   <artifactId>startup-trigger-plugin</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <name>Startup Trigger</name>
 
@@ -37,15 +36,23 @@
     </dependency>
   </dependencies>
 
- <scm>
-   <connection>scm:git:https://github.com/jenkinsci/startup-trigger-plugin-plugin.git</connection>
-   <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin-plugin.git</developerConnection>
+  <scm>
+    <connection>scm:git:git://github.com/jenkinsci/startup-trigger-plugin-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin-plugin.git</developerConnection>
   </scm>
 
-  <distributionManagement>
+  <repositories>
     <repository>
-      <id>java.net-m2-repository</id>
-      <url>http://maven.hudson-labs.org:8081/content/repositories/releases/</url>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
     </repository>
-  </distributionManagement>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
 </project>
