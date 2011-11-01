@@ -9,7 +9,6 @@
     <version>1.396</version>
   </parent>
 
-  <groupId>${parent.groupId}</groupId>
   <artifactId>startup-trigger-plugin</artifactId>
   <version>1.2-SNAPSHOT</version>
   <packaging>hpi</packaging>
