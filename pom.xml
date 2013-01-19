@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.jenkins-ci.plugins</groupId>
-    <artifactId>plugin</artifactId>   
-    <version>1.396</version>
-  </parent>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>1.396</version>
+    </parent>
 
-  <artifactId>startup-trigger-plugin</artifactId>
-  <version>1.2-SNAPSHOT</version>
-  <packaging>hpi</packaging>
-  <name>Startup Trigger</name>
+    <artifactId>startup-trigger-plugin</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>hpi</packaging>
+    <name>Startup Trigger</name>
+    <url>http://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger</url>
 
-  <url>http://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger</url>
- 
-  <developers>
-    <developer>
-      <id>ashlux</id>
-      <name>Ash Lux</name>
-      <email>ashlux@gmail.com</email>
-      <url>http://www.ashlux.com/</url>
-      <timezone>-5</timezone>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <id>ashlux</id>
+            <name>Ash Lux</name>
+            <email>ashlux@gmail.com</email>
+            <url>http://www.ashlux.com/</url>
+            <timezone>-5</timezone>
+        </developer>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <developer>
+            <id>gboissinot</id>
+            <name>Gregory Boissinot</name>
+            <email>gregory.boissinot@gmail.com</email>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 
-  <scm>
-    <connection>scm:git:git://github.com/jenkinsci/startup-trigger-plugin-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin-plugin.git</developerConnection>
-  </scm>
+    <dependencies>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-  <repositories>
-    <repository>
-      <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
-    </repository>
-  </repositories>
+    <scm>
+        <connection>scm:git:git://github.com/jenkinsci/startup-trigger-plugin-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin-plugin.git</developerConnection>
+    </scm>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
-    </pluginRepository>
-  </pluginRepositories>
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>http://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repo.jenkins-ci.org</id>
+            <url>http://repo.jenkins-ci.org/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

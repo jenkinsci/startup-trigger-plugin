@@ -2,12 +2,10 @@ package org.jvnet.hudson.plugins.triggers.startup;
 
 import hudson.model.Cause;
 
-public class HudsonStartupCause
-    extends Cause
-{
+public class HudsonStartupCause extends Cause {
+
     @Override
-    public String getShortDescription()
-    {
+    public String getShortDescription() {
         return "Started due to Jenkins startup.";
     }
 }
