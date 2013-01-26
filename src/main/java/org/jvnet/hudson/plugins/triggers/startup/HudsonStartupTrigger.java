@@ -46,7 +46,7 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
 
         @Override
         public String getDisplayName() {
-            return "Build when job nodes start (nodes matching the configured node label)";
+            return "Build when job nodes start";
         }
     }
 }
