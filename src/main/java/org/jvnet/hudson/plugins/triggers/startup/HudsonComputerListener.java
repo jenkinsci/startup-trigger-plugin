@@ -16,51 +16,35 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
 
     @Override
     public void onOnline(Computer c, TaskListener listener) throws IOException, InterruptedException {
-
         listener.getLogger().print("[StartupTrigger[] - Scanning jobs for slave " + c.getName());
         List<TopLevelItem> items = Hudson.getInstance().getItems();
         for (TopLevelItem item : items) {
-            if (item instanceof AbstractProject) {
-                AbstractProject project = (AbstractProject) item;
-                HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) project.getTrigger(HudsonStartupTrigger.class);
-                if (startupTrigger != null) {
-                    String triggerLabel = startupTrigger.getLabel();
-                    Node node = c.getNode();
-                    if (node != null) {
-                        String nodeLabel = node.getLabelString();
-                        if (nodeLabel != null) {
+            processAndScheduleIfNeeded(item, c, listener);
+        }
+    }
 
-                            if (triggerLabel == null) {
-                                if (nodeLabel == "") {
-                                    listener.getLogger().print("[StartupTrigger[] - Scheduling " + project.getName());
-                                    project.scheduleBuild(0, new HudsonStartupCause());
-                                    continue;
-                                }
-                            }
+    private void processAndScheduleIfNeeded(TopLevelItem item, Computer c, TaskListener listener) {
 
-                            //Check node label (multiple node can have the same label)
-                            if (triggerLabel.equalsIgnoreCase(nodeLabel)) {
-                                listener.getLogger().print("[StartupTrigger[] - Scheduling " + project.getName());
-                                project.scheduleBuild(0, new HudsonStartupCause());
-                                continue;
-                            }
+        if (!(item instanceof AbstractProject)) {
+            return;
+        }
+        AbstractProject<?, ?> project = (AbstractProject) item;
 
-                            //Check node name
-                            if (triggerLabel.equalsIgnoreCase(node.getNodeName())) {
-                                listener.getLogger().print("[StartupTrigger[] - Scheduling " + project.getName());
-                                project.scheduleBuild(0, new HudsonStartupCause());
-                                continue;
-                            }
-
-                        }
-
-                    }
-                }
-            }
+        HudsonStartupTrigger startupTrigger = project.getTrigger(HudsonStartupTrigger.class);
+        if (startupTrigger == null) {
+            return;
         }
 
+        Node node = c.getNode();
+        if (node == null) {
+            return;
+        }
 
+        HudsonStartupService startupService = new HudsonStartupService();
+        if (startupService.has2Schedule(startupTrigger, node)) {
+            listener.getLogger().print("[StartupTrigger[] - Scheduling " + project.getName());
+            project.scheduleBuild(0, new HudsonStartupCause());
+        }
     }
+
 }
-
-
