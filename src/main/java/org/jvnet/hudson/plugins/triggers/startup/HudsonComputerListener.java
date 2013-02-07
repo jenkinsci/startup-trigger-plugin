@@ -16,11 +16,22 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
 
     @Override
     public void onOnline(Computer c, TaskListener listener) throws IOException, InterruptedException {
-        listener.getLogger().print("[StartupTrigger[] - Scanning jobs for slave " + c.getName());
-        List<TopLevelItem> items = Hudson.getInstance().getItems();
-        for (TopLevelItem item : items) {
-            processAndScheduleIfNeeded(item, c, listener);
+        Node node = c.getNode();
+        if (node != null) {
+            listener.getLogger().println("[StartupTrigger] - Scanning jobs for node " + getNodeName(node));
+            List<TopLevelItem> items = Hudson.getInstance().getItems();
+            for (TopLevelItem item : items) {
+                processAndScheduleIfNeeded(item, c, listener);
+            }
         }
+    }
+
+    private String getNodeName(Node node) {
+        String nodeName = node.getNodeName();
+        if ("".equals(nodeName)) {
+            return "master";
+        }
+        return nodeName;
     }
 
     private void processAndScheduleIfNeeded(TopLevelItem item, Computer c, TaskListener listener) {
@@ -42,7 +53,7 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
 
         HudsonStartupService startupService = new HudsonStartupService();
         if (startupService.has2Schedule(startupTrigger, node)) {
-            listener.getLogger().print("[StartupTrigger[] - Scheduling " + project.getName());
+            listener.getLogger().print("[StartupTrigger] - Scheduling " + project.getName());
             project.scheduleBuild(0, new HudsonStartupCause());
         }
     }
