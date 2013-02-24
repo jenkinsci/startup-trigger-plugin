@@ -22,18 +22,31 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
 
     private String label;
 
+    private int quietPeriod;
+
     @DataBoundConstructor
-    public HudsonStartupTrigger(String label) throws ANTLRException {
+    public HudsonStartupTrigger(String label, String quietPeriod) throws ANTLRException {
         super();
         this.label = Util.fixEmpty(label);
+        String givenQuietPeriod = Util.fixEmpty(quietPeriod);
+        if (givenQuietPeriod == null) {
+            this.quietPeriod = 0;
+        } else {
+            this.quietPeriod = Integer.parseInt(quietPeriod);
+        }
     }
 
     public String getLabel() {
         return label;
     }
 
+    public int getQuietPeriod() {
+        return quietPeriod;
+    }
+
     @Override
     public void start(BuildableItem project, boolean newInstance) {
+        //DO NOTHING HERE. RELIES ON EXTERNAL LISTENER
     }
 
     @Extension
