@@ -39,7 +39,16 @@ public class HudsonStartupService implements Serializable {
             return true;
         }
 
-        return triggerLabel.equalsIgnoreCase(jobNode.getLabelString());  //Match node label
+        String labelString = jobNode.getLabelString();
+        if (labelString == null) {
+            return false;
+        }
+
+        if (triggerLabel.equalsIgnoreCase(labelString)) { //Match node label
+            return true;
+        }
+
+        return labelString.contains(triggerLabel);
     }
 
     private boolean isMaster(String nodeName) {
