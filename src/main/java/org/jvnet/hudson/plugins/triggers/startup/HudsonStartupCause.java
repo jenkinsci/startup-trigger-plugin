@@ -4,7 +4,7 @@ import hudson.model.Cause;
 
 public class HudsonStartupCause extends Cause {
 
-    Node node;
+    private Node node;
 
     public HudsonStartupCause(Node node) {
         this.node = node
