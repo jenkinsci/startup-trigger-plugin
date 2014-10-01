@@ -5,7 +5,7 @@ import hudson.model.Cause;
 public class HudsonStartupCause extends Cause {
 
     @Override
-    public String getShortDescription() {
-        return "Started due to the start of a node.";
+    public String getShortDescription(Node node) {
+        return "Started due to the start of the node " + node.getDisplayName();
     }
 }
