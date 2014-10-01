@@ -6,8 +6,7 @@ public class HudsonStartupCause extends Cause {
 
     Node node;
 
-    public HudsonStartupCause(Node node)
-    {
+    public HudsonStartupCause(Node node) {
         this.node = node
     }
 
