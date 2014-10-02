@@ -7,7 +7,7 @@ public class HudsonStartupCause extends Cause {
     private Node node;
 
     public HudsonStartupCause(Node node) {
-        this.node = node
+        this.node = node;
     }
 
     @Override
