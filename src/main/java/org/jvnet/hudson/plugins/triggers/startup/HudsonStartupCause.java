@@ -1,6 +1,7 @@
 package org.jvnet.hudson.plugins.triggers.startup;
 
 import hudson.model.Cause;
+import hudson.model.Node;
 
 public class HudsonStartupCause extends Cause {
 
