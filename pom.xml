@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>startup-trigger-plugin</artifactId>
-    <version>2.5-SNAPSHOT</version>
+    <version>2.5</version>
     <packaging>hpi</packaging>
     <name>Startup Trigger</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger</url>
@@ -51,7 +51,8 @@
     <scm>
         <connection>scm:git:git://github.com/jenkinsci/startup-trigger-plugin-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin-plugin.git</developerConnection>
-    </scm>
+      <tag>startup-trigger-plugin-2.5</tag>
+  </scm>
 
     <repositories>
         <repository>
