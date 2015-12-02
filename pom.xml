@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.396</version>
+        <version>1.424</version>
     </parent>
 
     <artifactId>startup-trigger-plugin</artifactId>
@@ -14,6 +14,13 @@
     <packaging>hpi</packaging>
     <name>Startup Trigger</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger</url>
+
+    <licenses>
+        <license>
+            <name>MIT license</name>
+            <comments>All source code is under the MIT license.</comments>
+        </license>
+    </licenses>
 
     <developers>
         <developer>
