@@ -28,7 +28,9 @@ import hudson.slaves.ComputerListener;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterValue;
 
 /**
  * @author Gregory Boissinot
@@ -75,8 +77,14 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
 
         HudsonStartupService startupService = new HudsonStartupService();
         if (startupService.has2Schedule(startupTrigger, node)) {
-            listener.getLogger().print("[StartupTrigger] - Scheduling " + project.getName());
-            project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause());
+            listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
+            List<ParametersAction> parametersActions = new ArrayList<ParametersAction>();
+            if(startupTrigger.getNodeParameterName() != null) {
+                ParameterValue nodeNameParameter = new NodeParameterValue(startupTrigger.getNodeParameterName(), "", node.getNodeName());
+                ParametersAction parametersAction = new ParametersAction(nodeNameParameter);
+                parametersActions.add(parametersAction);
+            }
+            project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause(), parametersActions.toArray(new ParametersAction[parametersActions.size()]));
         }
     }
 
