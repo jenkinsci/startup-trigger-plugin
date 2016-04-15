@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.424</version>
+        <version>1.480</version>
     </parent>
 
     <artifactId>startup-trigger-plugin</artifactId>
@@ -44,6 +44,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>cloudbees-folder</artifactId>
+            <version>4.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
