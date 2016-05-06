@@ -27,14 +27,15 @@ import hudson.model.*;
 import hudson.slaves.ComputerListener;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Gregory Boissinot
  */
 @Extension
-public class HudsonComputerListener extends ComputerListener implements Serializable {
+public class HudsonComputerListener extends ComputerListener {
+
+    private final HudsonStartupService startupService = new HudsonStartupService();
 
     @Override
     public void onOnline(Computer c, TaskListener listener) throws IOException, InterruptedException {
@@ -73,7 +74,6 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
             return;
         }
 
-        HudsonStartupService startupService = new HudsonStartupService();
         if (startupService.has2Schedule(startupTrigger, node)) {
             listener.getLogger().print("[StartupTrigger] - Scheduling " + project.getName());
             project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause());
