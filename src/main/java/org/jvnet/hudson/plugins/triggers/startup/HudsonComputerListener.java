@@ -27,16 +27,18 @@ import hudson.model.*;
 import hudson.slaves.ComputerListener;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashMap;
 import org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterValue;
 
 /**
  * @author Gregory Boissinot
  */
 @Extension
-public class HudsonComputerListener extends ComputerListener implements Serializable {
+public class HudsonComputerListener extends ComputerListener {
+
+    private final HudsonStartupService startupService = new HudsonStartupService();
 
     @Override
     public void onOnline(Computer c, TaskListener listener) throws IOException, InterruptedException {
@@ -87,7 +89,7 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
         return new ParametersAction(params.values().toArray(new ParameterValue[params.size()]));
     }
 
-    private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener) {
+    private void processAndScheduleIfNeeded(TopLevelItem item, Computer c, TaskListener listener) {
         if (!(item instanceof AbstractProject)) {
             return;
         }

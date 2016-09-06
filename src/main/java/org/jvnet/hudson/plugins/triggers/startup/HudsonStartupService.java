@@ -22,14 +22,14 @@
  */
 package org.jvnet.hudson.plugins.triggers.startup;
 
+import hudson.model.Label;
 import hudson.model.Node;
-
-import java.io.Serializable;
+import jenkins.model.Jenkins;
 
 /**
  * @author Gregory Boissinot
  */
-public class HudsonStartupService implements Serializable {
+public class HudsonStartupService {
 
     public boolean has2Schedule(HudsonStartupTrigger startupTrigger, Node jobNode) {
 
@@ -40,37 +40,21 @@ public class HudsonStartupService implements Serializable {
             throw new NullPointerException("A node object has to be set.");
         }
 
-        String triggerLabel = startupTrigger.getLabel();
+        String triggerLabelString = startupTrigger.getLabel();
 
-        return has2Schedule(triggerLabel, jobNode);
+        return has2Schedule(triggerLabelString, jobNode);
     }
 
-    private boolean has2Schedule(String triggerLabel, Node jobNode) {
+    private boolean has2Schedule(String triggerLabelString, Node jobNode) {
 
-        String jobNodeName = jobNode.getNodeName();
-
-        if (triggerLabel == null) { //Jobs on master has to schedule
-            return isMaster(jobNodeName);
+        if (triggerLabelString == null) { //Jobs on master has to schedule
+            return isMaster(jobNode.getNodeName());
         }
 
-        if (triggerLabel.equalsIgnoreCase("master")) { //User set 'master' string, Jobs on master has to schedule
-            return isMaster(jobNodeName);
-        }
+		Jenkins jenkins = Jenkins.getInstance();
+        Label triggerLabel = jenkins.getLabel(triggerLabelString);
 
-        if (triggerLabel.equalsIgnoreCase(jobNodeName)) { //Match exactly node name
-            return true;
-        }
-
-        String labelString = jobNode.getLabelString();
-        if (labelString == null) {
-            return false;
-        }
-
-        if (triggerLabel.equalsIgnoreCase(labelString)) { //Match node label
-            return true;
-        }
-
-        return labelString.contains(triggerLabel);
+        return triggerLabel.contains(jobNode);
     }
 
     private boolean isMaster(String nodeName) {
