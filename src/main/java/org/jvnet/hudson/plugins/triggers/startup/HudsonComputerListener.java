@@ -103,7 +103,7 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
             return;
         }
 
-        if (startupService.has2Schedule(startupTrigger, node) ) {
+        if (startupService.has2Schedule(startupTrigger, node) && !project.isDisabled() ) {
             listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
 
             ParametersAction scheduleParameters = getDefaultParameters(project);
