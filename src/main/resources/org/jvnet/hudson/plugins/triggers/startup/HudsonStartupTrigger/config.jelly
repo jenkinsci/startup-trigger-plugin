@@ -8,4 +8,10 @@
         <f:textbox name="quietPeriod" value="${instance.quietPeriod}"/>
     </f:entry>
 
+    <f:advanced>
+        <f:entry title="${%Node parameter name}" field="nodeParameterName">
+            <f:textbox name="nodeParameterName" value="${instance.nodeParameterName}"/>
+        </f:entry>
+    </f:advanced>
+
 </j:jelly>
