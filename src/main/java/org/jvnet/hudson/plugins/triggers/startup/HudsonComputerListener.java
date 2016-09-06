@@ -76,7 +76,7 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
         HudsonStartupService startupService = new HudsonStartupService();
         if (startupService.has2Schedule(startupTrigger, node)) {
             listener.getLogger().print("[StartupTrigger] - Scheduling " + project.getName());
-            project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause());
+            project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause(node));
         }
     }
 
