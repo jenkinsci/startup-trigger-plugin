@@ -45,16 +45,24 @@ public class HudsonStartupService {
         return has2Schedule(triggerLabelString, jobNode);
     }
 
-    private boolean has2Schedule(String triggerLabelString, Node jobNode) {
+    private boolean has2Schedule(String triggerLabelListString, Node jobNode) {
 
-        if (triggerLabelString == null) { //Jobs on master has to schedule
+        if (triggerLabelListString == null) { //Jobs on master has to schedule
             return isMaster(jobNode.getNodeName());
         }
 
 		Jenkins jenkins = Jenkins.getInstance();
-        Label triggerLabel = jenkins.getLabel(triggerLabelString);
 
-        return triggerLabel.contains(jobNode);
+        String[] triggerLabelList = triggerLabelListString.split("[ ]|[, ]|[,]");
+        for (String triggerLabelString : triggerLabelList) {
+
+            Label triggerLabel = jenkins.getLabel(triggerLabelString);
+            if ( triggerLabel.contains(jobNode) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean isMaster(String nodeName) {
