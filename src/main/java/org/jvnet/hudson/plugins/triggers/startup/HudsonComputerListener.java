@@ -58,14 +58,42 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
         return nodeName;
     }
 
-    private void processAndScheduleIfNeeded(TopLevelItem item, Computer c, TaskListener listener) {
+    private static ParametersAction getDefaultParameters(AbstractProject project) {
+        ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
 
+        if (property == null) {
+            return new ParametersAction();
+        }
+
+        List<ParameterValue> parameters = new ArrayList<ParameterValue>();
+        for (ParameterDefinition pd : property.getParameterDefinitions()) {
+            ParameterValue param = pd.getDefaultParameterValue();
+            if (param != null) {
+                parameters.add(param);
+            }
+        }
+
+        return new ParametersAction(parameters);
+    }
+
+    private static ParametersAction mergeParameters(ParametersAction base, ParametersAction overlay) {
+        LinkedHashMap<String,ParameterValue> params = new LinkedHashMap<String,ParameterValue>();
+
+        for (ParameterValue param : base.getParameters())
+            params.put(param.getName(), param);
+        for (ParameterValue param : overlay.getParameters())
+            params.put(param.getName(), param);
+
+        return new ParametersAction(params.values().toArray(new ParameterValue[params.size()]));
+    }
+
+    private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener) {
         if (!(item instanceof AbstractProject)) {
             return;
         }
         AbstractProject<?, ?> project = (AbstractProject) item;
 
-        HudsonStartupTrigger startupTrigger = project.getTrigger(HudsonStartupTrigger.class);
+        HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) project.getTrigger(HudsonStartupTrigger.class);
         if (startupTrigger == null) {
             return;
         }
@@ -75,16 +103,16 @@ public class HudsonComputerListener extends ComputerListener implements Serializ
             return;
         }
 
-        HudsonStartupService startupService = new HudsonStartupService();
-        if (startupService.has2Schedule(startupTrigger, node)) {
+        if (startupService.has2Schedule(startupTrigger, node) ) {
             listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
-            List<ParametersAction> parametersActions = new ArrayList<ParametersAction>();
+
+            ParametersAction scheduleParameters = getDefaultParameters(project);
             if(startupTrigger.getNodeParameterName() != null) {
                 ParameterValue nodeNameParameter = new NodeParameterValue(startupTrigger.getNodeParameterName(), "", node.getNodeName());
-                ParametersAction parametersAction = new ParametersAction(nodeNameParameter);
-                parametersActions.add(parametersAction);
+                scheduleParameters = mergeParameters(scheduleParameters, new ParametersAction(nodeNameParameter));
             }
-            project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause(node), parametersActions.toArray(new ParametersAction[parametersActions.size()]));
+
+            project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause(node), scheduleParameters);
         }
     }
 
