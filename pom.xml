@@ -24,6 +24,13 @@
 
     <developers>
         <developer>
+            <id>ejpenney</id>
+            <name>Emory Penney</name>
+            <email>treadstoneit@gmail.com</email>
+            <timezone>-8</timezone>
+        </developer>
+
+        <developer>
             <id>ashlux</id>
             <name>Ash Lux</name>
             <email>ashlux@gmail.com</email>
