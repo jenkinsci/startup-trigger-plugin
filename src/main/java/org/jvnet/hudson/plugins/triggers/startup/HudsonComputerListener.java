@@ -45,9 +45,9 @@ public class HudsonComputerListener extends ComputerListener {
         Node node = c.getNode();
         if (node != null) {
             listener.getLogger().println("[StartupTrigger] - Scanning jobs for node " + getNodeName(node));
-            List<TopLevelItem> items = Hudson.getInstance().getItems();
-            for (TopLevelItem item : items) {
-                processAndScheduleIfNeeded(item, c, listener);
+            List<AbstractProject> jobs = Hudson.getInstance().getAllItems(AbstractProject.class);
+            for (AbstractProject job : jobs) {
+                processAndScheduleIfNeeded(job, c, listener);
             }
         }
     }
@@ -89,12 +89,7 @@ public class HudsonComputerListener extends ComputerListener {
         return new ParametersAction(params.values().toArray(new ParameterValue[params.size()]));
     }
 
-    private void processAndScheduleIfNeeded(TopLevelItem item, Computer c, TaskListener listener) {
-        if (!(item instanceof AbstractProject)) {
-            return;
-        }
-        AbstractProject<?, ?> project = (AbstractProject) item;
-
+    private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener) {
         HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) project.getTrigger(HudsonStartupTrigger.class);
         if (startupTrigger == null) {
             return;
