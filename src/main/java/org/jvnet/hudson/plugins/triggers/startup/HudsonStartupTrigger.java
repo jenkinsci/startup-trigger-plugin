@@ -46,8 +46,10 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
 
     private int quietPeriod;
 
+    private String nodeParameterName;
+
     @DataBoundConstructor
-    public HudsonStartupTrigger(String label, String quietPeriod) throws ANTLRException {
+    public HudsonStartupTrigger(String label, String quietPeriod, String nodeParameterName) throws ANTLRException {
         super();
         this.label = Util.fixEmpty(label);
         String givenQuietPeriod = Util.fixEmpty(quietPeriod);
@@ -56,6 +58,7 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
         } else {
             this.quietPeriod = Integer.parseInt(quietPeriod);
         }
+        this.nodeParameterName = Util.fixEmpty(nodeParameterName);
     }
 
     public String getLabel() {
@@ -64,6 +67,10 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
 
     public int getQuietPeriod() {
         return quietPeriod;
+    }
+
+    public String getNodeParameterName() {
+        return nodeParameterName;
     }
 
     @Override
