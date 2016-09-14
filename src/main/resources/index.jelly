@@ -1,3 +1,4 @@
+<?jelly escape-by-default='true'?>
 <div>
     This plugin allows you to trigger a build when job nodes (master/slave) start.
 </div>
