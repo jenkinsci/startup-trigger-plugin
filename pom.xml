@@ -29,21 +29,6 @@
             <email>treadstoneit@gmail.com</email>
             <timezone>-8</timezone>
         </developer>
-
-        <developer>
-            <id>ashlux</id>
-            <name>Ash Lux</name>
-            <email>ashlux@gmail.com</email>
-            <url>http://www.ashlux.com/</url>
-            <timezone>-5</timezone>
-        </developer>
-
-        <developer>
-            <id>gboissinot</id>
-            <name>Gregory Boissinot</name>
-            <email>gregory.boissinot@gmail.com</email>
-            <timezone>+1</timezone>
-        </developer>
     </developers>
 
     <dependencies>
