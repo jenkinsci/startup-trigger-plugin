@@ -32,7 +32,7 @@ public class LabelExpressionTest extends HudsonTestCase {
     public void testBasicExpression() throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = createFreeStyleProject("job");
-        job.addTrigger(new HudsonStartupTrigger("slave0 && DUMMY", null, null));
+        job.addTrigger(new HudsonStartupTrigger("slave0 && DUMMY", null, null, true, false));
 
         // Create slave which node name will be slave0
         createOnlineSlave(Label.get("DUMMY"));

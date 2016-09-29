@@ -40,13 +40,32 @@ public class HudsonComputerListener extends ComputerListener {
     private final HudsonStartupService startupService = new HudsonStartupService();
 
     @Override
+    public void onTemporarilyOnline(Computer c) {
+        Node node = c.getNode();
+        if (node != null) {
+            List<AbstractProject> jobs = Hudson.getInstance().getAllItems(AbstractProject.class);
+            for (AbstractProject job : jobs) {
+                HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
+                if (startupTrigger != null) {
+                    if (startupTrigger.getRunOnOnline()) {
+                        processAndScheduleIfNeeded(job, c, null, startupTrigger);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void onOnline(Computer c, TaskListener listener) throws IOException, InterruptedException {
         Node node = c.getNode();
         if (node != null) {
             listener.getLogger().println("[StartupTrigger] - Scanning jobs for node " + getNodeName(node));
             List<AbstractProject> jobs = Hudson.getInstance().getAllItems(AbstractProject.class);
             for (AbstractProject job : jobs) {
-                processAndScheduleIfNeeded(job, c, listener);
+                HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
+                if (startupTrigger.getRunOnConnect()) {
+                    processAndScheduleIfNeeded(job, c, listener, startupTrigger);
+                }
             }
         }
     }
@@ -77,8 +96,7 @@ public class HudsonComputerListener extends ComputerListener {
         return new ParametersAction(parameters);
     }
 
-    private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener) {
-        HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) project.getTrigger(HudsonStartupTrigger.class);
+    private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
         if (startupTrigger == null) {
             return;
         }
@@ -89,7 +107,9 @@ public class HudsonComputerListener extends ComputerListener {
         }
 
         if (startupService.has2Schedule(startupTrigger, node) && !project.isDisabled() ) {
-            listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
+            if (listener != null) {
+                listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
+            }
 
             ParametersAction scheduleParameters = getDefaultParameters(project);
             if(startupTrigger.getNodeParameterName() != null) {

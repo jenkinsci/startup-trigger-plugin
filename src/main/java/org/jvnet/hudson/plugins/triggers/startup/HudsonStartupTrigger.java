@@ -30,6 +30,8 @@ import hudson.model.Item;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
+import static org.apache.commons.lang.BooleanUtils.toBooleanDefaultIfNull;
+
 
 /**
  * Enables the current job to be restarted when Jenkins nodes start
@@ -48,8 +50,12 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
 
     private String nodeParameterName;
 
+    private Boolean runOnOnline = false;
+
+    private Boolean runOnConnect = true;
+
     @DataBoundConstructor
-    public HudsonStartupTrigger(String label, String quietPeriod, String nodeParameterName) throws ANTLRException {
+    public HudsonStartupTrigger(String label, String quietPeriod, String nodeParameterName, Boolean runOnConnect, Boolean runOnOnline) throws ANTLRException {
         super();
         this.label = Util.fixEmpty(label);
         String givenQuietPeriod = Util.fixEmpty(quietPeriod);
@@ -59,6 +65,8 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
             this.quietPeriod = Integer.parseInt(quietPeriod);
         }
         this.nodeParameterName = Util.fixEmpty(nodeParameterName);
+        this.runOnConnect = toBooleanDefaultIfNull(runOnConnect, true);
+        this.runOnOnline = toBooleanDefaultIfNull(runOnOnline, false);
     }
 
     public String getLabel() {
@@ -72,6 +80,10 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
     public String getNodeParameterName() {
         return nodeParameterName;
     }
+
+    public Boolean getRunOnOnline() { return runOnOnline; }
+
+    public Boolean getRunOnConnect() { return runOnConnect; }
 
     @Override
     public void start(BuildableItem project, boolean newInstance) {

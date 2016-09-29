@@ -33,7 +33,7 @@ public class HudsonComputerListenerTest extends HudsonTestCase {
     public void testRootJob() throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = createFreeStyleProject("job");
-        job.addTrigger(new HudsonStartupTrigger("slave0", null, null));
+        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, true, false));
 
         // Create slave which node name will be slave0
         createOnlineSlave();
@@ -48,7 +48,7 @@ public class HudsonComputerListenerTest extends HudsonTestCase {
         // Create one level folder and a job with startup trigger
         Folder folder = this.hudson.createProject(Folder.class, "folder1");
         FreeStyleProject job = folder.createProject(FreeStyleProject.class, "job");
-        job.addTrigger(new HudsonStartupTrigger("slave0", null, null));
+        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, true, false));
 
         // Create slave which node name will be slave0
         createOnlineSlave();
@@ -65,7 +65,7 @@ public class HudsonComputerListenerTest extends HudsonTestCase {
         Folder folder2 = folder1.createProject(Folder.class, "folder2");
 
         FreeStyleProject job = folder2.createProject(FreeStyleProject.class, "job");
-        job.addTrigger(new HudsonStartupTrigger("slave0", null, null));
+        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, true, false));
 
 
         // Create slave which node name will be slave0
