@@ -46,10 +46,8 @@ public class HudsonComputerListener extends ComputerListener {
             List<AbstractProject> jobs = Hudson.getInstance().getAllItems(AbstractProject.class);
             for (AbstractProject job : jobs) {
                 HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
-                if (startupTrigger != null) {
-                    if (startupTrigger.getRunOnOnline()) {
-                        processAndScheduleIfNeeded(job, c, null, startupTrigger);
-                    }
+                if (startupTrigger.getRunOnOnline()) {
+                    processAndScheduleIfNeeded(job, c, null, startupTrigger);
                 }
             }
         }
