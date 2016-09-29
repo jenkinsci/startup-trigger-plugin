@@ -29,7 +29,6 @@ import hudson.slaves.ComputerListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.LinkedHashMap;
 import org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterValue;
 
 /**
@@ -78,17 +77,6 @@ public class HudsonComputerListener extends ComputerListener {
         return new ParametersAction(parameters);
     }
 
-    private static ParametersAction mergeParameters(ParametersAction base, ParametersAction overlay) {
-        LinkedHashMap<String,ParameterValue> params = new LinkedHashMap<String,ParameterValue>();
-
-        for (ParameterValue param : base.getParameters())
-            params.put(param.getName(), param);
-        for (ParameterValue param : overlay.getParameters())
-            params.put(param.getName(), param);
-
-        return new ParametersAction(params.values().toArray(new ParameterValue[params.size()]));
-    }
-
     private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener) {
         HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) project.getTrigger(HudsonStartupTrigger.class);
         if (startupTrigger == null) {
@@ -106,7 +94,7 @@ public class HudsonComputerListener extends ComputerListener {
             ParametersAction scheduleParameters = getDefaultParameters(project);
             if(startupTrigger.getNodeParameterName() != null) {
                 ParameterValue nodeNameParameter = new NodeParameterValue(startupTrigger.getNodeParameterName(), "", node.getNodeName());
-                scheduleParameters = mergeParameters(scheduleParameters, new ParametersAction(nodeNameParameter));
+                scheduleParameters = scheduleParameters.merge(new ParametersAction(nodeNameParameter));
             }
 
             project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause(node), scheduleParameters);
