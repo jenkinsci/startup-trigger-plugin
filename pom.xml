@@ -53,14 +53,16 @@
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>credentials</artifactId>
-            <version>1.8.3</version>
+            <version>1.25</version>
             <optional>true</optional>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>matrix-auth</artifactId>
             <version>1.0.2</version>
             <optional>true</optional>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -97,7 +99,7 @@
     </pluginRepositories>
 
     <properties>
-        <jenkins.version>1.580.1</jenkins.version>
+        <jenkins.version>1.586</jenkins.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
