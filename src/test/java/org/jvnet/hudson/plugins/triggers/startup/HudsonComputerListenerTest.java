@@ -27,13 +27,14 @@ package org.jvnet.hudson.plugins.triggers.startup;
 import com.cloudbees.hudson.plugins.folder.Folder;
 import hudson.model.FreeStyleProject;
 import org.jvnet.hudson.test.HudsonTestCase;
+import hudson.slaves.DumbSlave;
 
 
 public class HudsonComputerListenerTest extends HudsonTestCase {
-    public void testRootJob() throws Exception {
+    public void testRootJobConnect() throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = createFreeStyleProject("job");
-        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, null));
+        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
 
         // Create slave which node name will be slave0
         createOnlineSlave();
@@ -41,6 +42,25 @@ public class HudsonComputerListenerTest extends HudsonTestCase {
         // Wait for the completion of the build
         waitUntilNoActivity();
 
+        assertTrue(job.getLastSuccessfulBuild().number == 1);
+    }
+
+    public void testRootJobOnline() throws Exception {
+        // Create job with startup trigger
+        FreeStyleProject job = createFreeStyleProject("job");
+        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_ONLINE"));
+
+        // Create slave which node name will be slave0
+        DumbSlave slave = createOnlineSlave();
+
+        // Wait for the completion of the build (there should be none)
+        waitUntilNoActivity();
+        assertTrue(job.getLastSuccessfulBuild() == null);
+
+        // Cycle node offline then back online
+        slave.toComputer().setTemporarilyOffline(true, null);
+        slave.toComputer().setTemporarilyOffline(false, null);
+        waitUntilNoActivity();
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
 

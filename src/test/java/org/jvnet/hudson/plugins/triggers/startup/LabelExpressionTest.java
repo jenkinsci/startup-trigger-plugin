@@ -42,4 +42,18 @@ public class LabelExpressionTest extends HudsonTestCase {
 
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
+
+    public void testMultiLabels() throws Exception {
+        // Create job with startup trigger
+        FreeStyleProject job = createFreeStyleProject("job");
+        job.addTrigger(new HudsonStartupTrigger("slave0 DUMMY", null, null, null));
+
+        // Create slave which node name will be slave0
+        createOnlineSlave(Label.get("DUMMY"));
+
+        // Wait for the completion of the build
+        waitUntilNoActivity();
+
+        assertTrue(job.getLastSuccessfulBuild().number == 1);
+    }
 }
