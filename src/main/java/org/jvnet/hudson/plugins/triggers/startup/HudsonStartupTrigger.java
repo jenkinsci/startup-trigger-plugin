@@ -48,7 +48,7 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
 
     private String nodeParameterName;
 
-    private String runOnChoice = "ON_CONNECT";
+    private String runOnChoice;
 
     @DataBoundConstructor
     public HudsonStartupTrigger(String label, String quietPeriod, String nodeParameterName, String runOnChoice) throws ANTLRException {
@@ -61,13 +61,7 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
             this.quietPeriod = Integer.parseInt(quietPeriod);
         }
         this.nodeParameterName = Util.fixEmpty(nodeParameterName);
-
-        String givenRunOnChoice = Util.fixEmpty(runOnChoice);
-        if (givenRunOnChoice == null) {
-            this.runOnChoice = "ON_CONNECT";
-        } else {
-            this.runOnChoice = givenRunOnChoice;
-        }
+        this.runOnChoice = runOnChoice;
     }
 
     public String getLabel() {
@@ -83,7 +77,11 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
     }
 
     public String getRunOnChoice(){
-        return runOnChoice;
+        if (runOnChoice == null) {
+            return "ON_CONNECT";
+        } else {
+            return runOnChoice;
+        }
     }
 
     @Override

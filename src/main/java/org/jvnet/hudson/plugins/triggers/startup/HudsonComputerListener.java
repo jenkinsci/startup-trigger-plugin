@@ -29,6 +29,7 @@ import hudson.slaves.ComputerListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterValue;
 
 /**
@@ -41,31 +42,31 @@ public class HudsonComputerListener extends ComputerListener {
 
     @Override
     public void onTemporarilyOnline(Computer c) {
-        Node node = c.getNode();
-        if (node != null) {
-            List<AbstractProject> jobs = Hudson.getInstance().getAllItems(AbstractProject.class);
-            for (AbstractProject job : jobs) {
-                HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
-                if (!startupTrigger.getRunOnChoice().equals("ON_CONNECT")) {
-                    processAndScheduleIfNeeded(job, c, null, startupTrigger);
-                }
-            }
-        }
+        handleConnect("ON_CONNECT", c, null);
     }
 
     @Override
     public void onOnline(Computer c, TaskListener listener) throws IOException, InterruptedException {
+        handleConnect("ON_ONLINE", c, listener);
+    }
+
+    private void handleConnect(String connectionNotType, Computer c, TaskListener listener) {
         Node node = c.getNode();
         if (node != null) {
-            listener.getLogger().println("[StartupTrigger] - Scanning jobs for node " + getNodeName(node));
+            if (listener != null) {
+                listener.getLogger().println("[StartupTrigger] - Scanning jobs for node " + getNodeName(node));
+            }
             List<AbstractProject> jobs = Hudson.getInstance().getAllItems(AbstractProject.class);
             for (AbstractProject job : jobs) {
                 HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
-                if (!startupTrigger.getRunOnChoice().equals("ON_ONLINE")) {
-                    processAndScheduleIfNeeded(job, c, listener, startupTrigger);
+                if (startupTrigger != null) {
+                    if (!startupTrigger.getRunOnChoice().equals(connectionNotType)) {
+                        processAndScheduleIfNeeded(job, c, listener, startupTrigger);
+                    }
                 }
             }
         }
+
     }
 
     private String getNodeName(Node node) {
@@ -95,10 +96,6 @@ public class HudsonComputerListener extends ComputerListener {
     }
 
     private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
-        if (startupTrigger == null) {
-            return;
-        }
-
         Node node = c.getNode();
         if (node == null) {
             return;
