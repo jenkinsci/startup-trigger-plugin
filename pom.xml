@@ -79,8 +79,8 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:git://github.com/jenkinsci/startup-trigger-plugin-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin-plugin.git</developerConnection>
+        <connection>scm:git:git://github.com/jenkinsci/startup-trigger-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:jenkinsci/startup-trigger-plugin.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
