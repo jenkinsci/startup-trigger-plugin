@@ -24,6 +24,7 @@ This pulldown provides a few options for what types of startup events should tri
   - Run when node brought online
     - This will trigger when a node is "Temporarily Reconnected".  For example: Node was previously "Marked as offline" and has now been brought online.
   - Both
-    - Use this value to specify that both events should trigger build execution.
+    - Use this value to specify that both events should trigger build execution
+
 ## Development Environment
 This plugin seems to build successfully in all versions of Maven, but only releases correctly in Maven 3.3.9
