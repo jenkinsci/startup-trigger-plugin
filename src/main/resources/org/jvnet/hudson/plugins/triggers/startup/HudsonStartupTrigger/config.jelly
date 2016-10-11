@@ -13,7 +13,7 @@
         <f:entry title="${%Node parameter name}" field="nodeParameterName">
             <f:textbox name="nodeParameterName" value="${instance.nodeParameterName}"/>
         </f:entry>
-        <f:entry title="${%Trigger build on:}">
+        <f:entry title="${%Trigger build on:}" field="runOnChoice">
             <select name="runOnChoice">
                 <f:option value="ON_CONNECT" selected="${instance.runOnChoice=='ON_CONNECT'}">Run on initial connection (Default)</f:option>
                 <f:option value="ON_ONLINE" selected="${instance.runOnChoice=='ON_ONLINE'}">Run when node brought online</f:option>
