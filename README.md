@@ -16,7 +16,9 @@ This plugin will trigger builds when any node matching this/these labels is star
 Defaults to zero, allows you to specify the [Quiet Period](https://jenkins.io/blog/2010/08/11/quiet-period-feature/) before scheduling the job.
 ## Advanced Configuration
 ### Node parameter name
-The parameter name for Startup Trigger to use when specifying which node to run on.  Useful if the default NodeLabelParameter value is a label and you want to run the job on the node that triggered the job's execution.
+The parameter name for Startup Trigger to use when specifying which node triggered the job.  Useful if the default NodeLabelParameter value is a label and you want to run the job on the node that triggered the job's execution.
+
+This can also reference a StringParameter, if instead you want the name of the started node to be handed to a job as an argument.
 ### Trigger build on:
 This pulldown provides a few options for what types of startup events should trigger builds:
   - Run on initial connection (Default)
