@@ -95,6 +95,25 @@ public class HudsonComputerListener extends ComputerListener {
         return new ParametersAction(parameters);
     }
 
+    private static String getParameterType(AbstractProject project, String nodeParameterName) {
+        ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
+
+        if (property == null) {
+            return null;
+        }
+
+        for (ParameterDefinition pd : property.getParameterDefinitions()) {
+            ParameterValue param = pd.getDefaultParameterValue();
+            if (param != null) {
+                if (param.getName().equals(nodeParameterName)) {
+                    return pd.getType();
+                }
+            }
+        }
+
+        return null;
+    }
+
     private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
         Node node = c.getNode();
         if (node == null) {
@@ -108,8 +127,19 @@ public class HudsonComputerListener extends ComputerListener {
 
             ParametersAction scheduleParameters = getDefaultParameters(project);
             if(startupTrigger.getNodeParameterName() != null) {
-                ParameterValue nodeNameParameter = new NodeParameterValue(startupTrigger.getNodeParameterName(), "", node.getNodeName());
-                scheduleParameters = scheduleParameters.merge(new ParametersAction(nodeNameParameter));
+                String parameterType = getParameterType(project, startupTrigger.getNodeParameterName());
+                if (parameterType != null) {
+                    switch (parameterType) {
+                        case "LabelParameterDefinition":
+                            scheduleParameters = scheduleParameters.merge(new ParametersAction(new NodeParameterValue(startupTrigger.getNodeParameterName(), "", node.getNodeName())));
+                            break;
+                        case "StringParameterDefinition":
+                            scheduleParameters = scheduleParameters.merge(new ParametersAction(new StringParameterValue(startupTrigger.getNodeParameterName(), node.getNodeName())));
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
 
             project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause(node), scheduleParameters);
