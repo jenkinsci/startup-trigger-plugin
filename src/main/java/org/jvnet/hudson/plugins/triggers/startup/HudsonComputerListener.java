@@ -25,6 +25,7 @@ package org.jvnet.hudson.plugins.triggers.startup;
 import hudson.Extension;
 import hudson.model.*;
 import hudson.slaves.ComputerListener;
+import jenkins.model.Jenkins;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,12 +57,15 @@ public class HudsonComputerListener extends ComputerListener {
             if (listener != null) {
                 listener.getLogger().println("[StartupTrigger] - Scanning jobs for node " + getNodeName(node));
             }
-            List<AbstractProject> jobs = Hudson.getInstance().getAllItems(AbstractProject.class);
-            for (AbstractProject job : jobs) {
-                HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
-                if (startupTrigger != null) {
-                    if (!startupTrigger.getRunOnChoice().equals(connectionNotType)) {
-                        processAndScheduleIfNeeded(job, c, listener, startupTrigger);
+            Jenkins jenkinsInstance = Jenkins.getInstance();
+            if (jenkinsInstance != null) {
+                List<AbstractProject> jobs = jenkinsInstance.getAllItems(AbstractProject.class);
+                for (AbstractProject job : jobs) {
+                    HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
+                    if (startupTrigger != null) {
+                        if (!startupTrigger.getRunOnChoice().equals(connectionNotType)) {
+                            processAndScheduleIfNeeded(job, c, listener, startupTrigger);
+                        }
                     }
                 }
             }
