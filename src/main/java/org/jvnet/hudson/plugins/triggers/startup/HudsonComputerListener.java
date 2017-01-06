@@ -134,7 +134,7 @@ public class HudsonComputerListener extends ComputerListener {
             return;
         }
 
-        if (startupService.has2Schedule(startupTrigger, node) /*&& !project.isBuildable() */ ) {
+        if (startupService.has2Schedule(startupTrigger, node) && project.isBuildable() ) {
             if (listener != null) {
                 listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
             }
