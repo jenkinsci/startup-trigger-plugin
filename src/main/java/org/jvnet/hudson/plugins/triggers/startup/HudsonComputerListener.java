@@ -24,14 +24,17 @@ package org.jvnet.hudson.plugins.triggers.startup;
 
 import hudson.Extension;
 import hudson.model.*;
+import hudson.triggers.Trigger;
 import hudson.slaves.ComputerListener;
 import jenkins.model.Jenkins;
+import jenkins.model.ParameterizedJobMixIn;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterValue;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
 /**
  * @author Gregory Boissinot
@@ -59,18 +62,25 @@ public class HudsonComputerListener extends ComputerListener {
             }
             Jenkins jenkinsInstance = Jenkins.getInstance();
             if (jenkinsInstance != null) {
-                List<AbstractProject> jobs = jenkinsInstance.getAllItems(AbstractProject.class);
-                for (AbstractProject job : jobs) {
-                    HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) job.getTrigger(HudsonStartupTrigger.class);
-                    if (startupTrigger != null) {
-                        if (!startupTrigger.getRunOnChoice().equals(connectionNotType)) {
-                            processAndScheduleIfNeeded(job, c, listener, startupTrigger);
+                List<Job> jobs = jenkinsInstance.getAllItems(Job.class);
+
+                for (Job job : jobs) {
+                    if (job instanceof ParameterizedJobMixIn.ParameterizedJob) {
+                        ParameterizedJobMixIn.ParameterizedJob pJob = (ParameterizedJobMixIn.ParameterizedJob) job;
+
+                        for (Trigger<?> trigger : pJob.getTriggers().values()) {
+                            if (trigger instanceof HudsonStartupTrigger) {
+                                HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) trigger;
+
+                                if (!startupTrigger.getRunOnChoice().equals(connectionNotType)) {
+                                    processAndScheduleIfNeeded(job, c, listener, startupTrigger);
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-
     }
 
     private String getNodeName(Node node) {
@@ -81,7 +91,7 @@ public class HudsonComputerListener extends ComputerListener {
         return nodeName;
     }
 
-    private static ParametersAction getDefaultParameters(AbstractProject project) {
+    private static ParametersAction getDefaultParameters(Job project) {
         ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
 
         if (property == null) {
@@ -99,7 +109,7 @@ public class HudsonComputerListener extends ComputerListener {
         return new ParametersAction(parameters);
     }
 
-    private static String getParameterType(AbstractProject project, String nodeParameterName) {
+    private static String getParameterType(Job project, String nodeParameterName) {
         ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
 
         if (property == null) {
@@ -118,13 +128,13 @@ public class HudsonComputerListener extends ComputerListener {
         return null;
     }
 
-    private void processAndScheduleIfNeeded(AbstractProject project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
+    private void processAndScheduleIfNeeded(Job project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
         Node node = c.getNode();
         if (node == null) {
             return;
         }
 
-        if (startupService.has2Schedule(startupTrigger, node) && !project.isDisabled() ) {
+        if (startupService.has2Schedule(startupTrigger, node) /*&& !project.isBuildable() */ ) {
             if (listener != null) {
                 listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
             }
@@ -146,8 +156,17 @@ public class HudsonComputerListener extends ComputerListener {
                 }
             }
 
-            project.scheduleBuild(startupTrigger.getQuietPeriod(), new HudsonStartupCause(node), scheduleParameters);
+            scheduleBuild(project, startupTrigger.getQuietPeriod(), new HudsonStartupCause(node), scheduleParameters);
         }
     }
 
+    private void scheduleBuild(Job job, int quietPeriod, HudsonStartupCause startupCause, ParametersAction scheduleParameters){
+        if (job instanceof AbstractProject) {
+            AbstractProject project = (AbstractProject) job;
+            project.scheduleBuild(quietPeriod, startupCause, scheduleParameters);
+        } else if (job instanceof WorkflowJob) {
+            WorkflowJob project = (WorkflowJob) job;
+            project.scheduleBuild2(quietPeriod, scheduleParameters);
+        }
+    }
 }
