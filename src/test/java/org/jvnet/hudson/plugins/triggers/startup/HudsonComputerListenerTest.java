@@ -26,62 +26,87 @@ package org.jvnet.hudson.plugins.triggers.startup;
 
 import com.cloudbees.hudson.plugins.folder.Folder;
 import hudson.model.FreeStyleProject;
-import org.jvnet.hudson.test.HudsonTestCase;
+import org.junit.Rule;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import hudson.slaves.DumbSlave;
+import org.jvnet.hudson.test.JenkinsRule;
 
+public class HudsonComputerListenerTest {
+    @Rule
+    public JenkinsRule j = new JenkinsRule();
 
-public class HudsonComputerListenerTest extends HudsonTestCase {
+    @Test
     public void testRootJobConnect() throws Exception {
         // Create job with startup trigger
-        FreeStyleProject job = createFreeStyleProject("job");
+        FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
 
         // Create slave which node name will be slave0
-        createOnlineSlave();
+        j.createOnlineSlave();
 
         // Wait for the completion of the build
-        waitUntilNoActivity();
+        j.waitUntilNoActivity();
 
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
 
+    @Test
+    public void testRootJobDisabled() throws Exception {
+        // Create job with startup trigger
+        FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
+        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
+        job.disable();
+
+        // Create slave which node name will be slave0
+        j.createOnlineSlave();
+
+        // Wait for the completion of the build
+        j.waitUntilNoActivity();
+
+        assertTrue(job.getLastSuccessfulBuild() == null);
+    }
+
+    @Test
     public void testRootJobOnline() throws Exception {
         // Create job with startup trigger
-        FreeStyleProject job = createFreeStyleProject("job");
+        FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_ONLINE"));
 
         // Create slave which node name will be slave0
-        DumbSlave slave = createOnlineSlave();
+        DumbSlave slave = j.createOnlineSlave();
 
         // Wait for the completion of the build (there should be none)
-        waitUntilNoActivity();
-        assertTrue(job.getLastSuccessfulBuild() == null);
+        j.waitUntilNoActivity();
+        assert(job.getLastSuccessfulBuild() == null);
 
         // Cycle node offline then back online
         slave.toComputer().setTemporarilyOffline(true, null);
         slave.toComputer().setTemporarilyOffline(false, null);
-        waitUntilNoActivity();
+        j.waitUntilNoActivity();
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
 
+    @Test
     public void testFolderJob() throws Exception {
         // Create one level folder and a job with startup trigger
-        Folder folder = this.hudson.createProject(Folder.class, "folder1");
+        Folder folder = j.createProject(Folder.class, "folder1");
         FreeStyleProject job = folder.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, null));
 
         // Create slave which node name will be slave0
-        createOnlineSlave();
+        j.createOnlineSlave();
 
         // Wait for the completion of the build
-        waitUntilNoActivity();
+        j.waitUntilNoActivity();
 
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
 
+    @Test
     public void testSubFolderJob() throws Exception {
         // Create two level folder and a job with startup trigger
-        Folder folder1 = this.hudson.createProject(Folder.class, "folder1");
+        Folder folder1 = j.createProject(Folder.class, "folder1");
         Folder folder2 = folder1.createProject(Folder.class, "folder2");
 
         FreeStyleProject job = folder2.createProject(FreeStyleProject.class, "job");
@@ -89,10 +114,10 @@ public class HudsonComputerListenerTest extends HudsonTestCase {
 
 
         // Create slave which node name will be slave0
-        createOnlineSlave();
+        j.createOnlineSlave();
 
         // Wait for the completion of the build
-        waitUntilNoActivity();
+        j.waitUntilNoActivity();
 
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }

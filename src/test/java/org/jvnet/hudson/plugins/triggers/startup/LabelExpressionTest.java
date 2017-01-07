@@ -25,34 +25,42 @@ package org.jvnet.hudson.plugins.triggers.startup;
 
 import hudson.model.FreeStyleProject;
 import hudson.model.Label;
-import org.jvnet.hudson.test.HudsonTestCase;
+import org.junit.Rule;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.jvnet.hudson.test.JenkinsRule;
 
 
-public class LabelExpressionTest extends HudsonTestCase {
+public class LabelExpressionTest {
+    @Rule
+    public JenkinsRule j = new JenkinsRule() {};
+
+    @Test
     public void testBasicExpression() throws Exception {
         // Create job with startup trigger
-        FreeStyleProject job = createFreeStyleProject("job");
+        FreeStyleProject job = j.createFreeStyleProject("job");
         job.addTrigger(new HudsonStartupTrigger("slave0 && DUMMY", null, null, null));
 
         // Create slave which node name will be slave0
-        createOnlineSlave(Label.get("DUMMY"));
+        j.createOnlineSlave(Label.get("DUMMY"));
 
         // Wait for the completion of the build
-        waitUntilNoActivity();
+        j.waitUntilNoActivity();
 
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
 
+    @Test
     public void testMultiLabels() throws Exception {
         // Create job with startup trigger
-        FreeStyleProject job = createFreeStyleProject("job");
+        FreeStyleProject job = j.createFreeStyleProject("job");
         job.addTrigger(new HudsonStartupTrigger("slave0 DUMMY", null, null, null));
 
         // Create slave which node name will be slave0
-        createOnlineSlave(Label.get("DUMMY"));
+        j.createOnlineSlave(Label.get("DUMMY"));
 
         // Wait for the completion of the build
-        waitUntilNoActivity();
+        j.waitUntilNoActivity();
 
         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
