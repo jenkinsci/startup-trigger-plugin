@@ -32,6 +32,9 @@ import static org.junit.Assert.*;
 import hudson.slaves.DumbSlave;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+
 public class HudsonComputerListenerTest {
     @Rule
     public JenkinsRule j = new JenkinsRule();
@@ -49,6 +52,21 @@ public class HudsonComputerListenerTest {
         j.waitUntilNoActivity();
 
         assertTrue(job.getLastSuccessfulBuild().number == 1);
+    }
+
+    @Test
+     public void testRootWorkflowConnect() throws Exception {
+         // Create Workflow job with startup trigger
+         WorkflowJob job = j.jenkins.createProject(WorkflowJob.class, "job");
+         job.setDefinition(new CpsFlowDefinition("echo 'Hello World'", true));
+         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
+
+         // Create slave which node name will be slave0
+         j.createOnlineSlave();
+
+         // Wait for the completion of the build
+         j.waitUntilNoActivity();
+         assertTrue(job.getLastSuccessfulBuild().number == 1);
     }
 
     @Test
