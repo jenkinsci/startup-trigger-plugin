@@ -144,6 +144,7 @@ public class HudsonComputerListener extends ComputerListener {
                 String parameterType = getParameterType(project, startupTrigger.getNodeParameterName());
                 if (parameterType != null) {
                     switch (parameterType) {
+                        case "NodeParameterDefinition":
                         case "LabelParameterDefinition":
                             scheduleParameters = scheduleParameters.merge(new ParametersAction(new NodeParameterValue(startupTrigger.getNodeParameterName(), "", node.getNodeName())));
                             break;
