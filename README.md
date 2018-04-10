@@ -1,5 +1,5 @@
 # Startup Trigger Plugin
-The [Startup Trigger](https://wiki.jenkins-ci.org/display/JENKINS/Startup+Trigger) plugin allows you to trigger a build when Jenkins nodes (master/slave) start.
+The [Startup Trigger](https://plugins.jenkins.io/startup-trigger-plugin) plugin allows you to trigger a build when Jenkins nodes (master/slave) start.
 ## Configuration
 This plugin requires a jenkins restart (it will not work using install without restart). After installation you will find a new Build Trigger "Build when job nodes start" tickbox is available in the job configuration of each job.
 ### Restricted node Label
