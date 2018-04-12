@@ -27,13 +27,14 @@ import hudson.model.FreeStyleProject;
 import hudson.model.Label;
 import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import static org.junit.Assert.assertEquals;
 
 public class LabelExpressionTest {
     @Rule
-    public JenkinsRule j = new JenkinsRule() {};
+    public final JenkinsRule j = new JenkinsRule() {
+    };
 
     @Test
     public void testBasicExpression() throws Exception {
@@ -47,7 +48,7 @@ public class LabelExpressionTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertTrue(job.getLastSuccessfulBuild().number == 1);
+        assertEquals(job.getLastSuccessfulBuild().number, 1);
     }
 
     @Test
@@ -62,6 +63,6 @@ public class LabelExpressionTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertTrue(job.getLastSuccessfulBuild().number == 1);
+        assertEquals(job.getLastSuccessfulBuild().number, 1);
     }
 }

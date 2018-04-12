@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright (c) 2015 Ash Lux, Gregory Boissinot and all contributors
  * <p/>
@@ -51,13 +51,13 @@ public class HudsonStartupService {
             return isMaster(jobNode.getNodeName());
         }
 
-		Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.getInstance();
 
         String[] triggerLabelList = triggerLabelListString.split("[ ]|[, ]|[,]");
         for (String triggerLabelString : triggerLabelList) {
 
             Label triggerLabel = jenkins.getLabel(triggerLabelString);
-            if ( triggerLabel.contains(jobNode) ) {
+            if (triggerLabel.contains(jobNode)) {
                 return true;
             }
         }

@@ -1,40 +1,38 @@
-/**
- * The MIT License
- * Copyright (c) 2015 Ash Lux, Gregory Boissinot and all contributors
- * <p/>
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * <p/>
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * <p/>
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+/*
+  The MIT License
+  Copyright (c) 2015 Ash Lux, Gregory Boissinot and all contributors
+  <p/>
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  <p/>
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+  <p/>
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
  */
 package org.jvnet.hudson.plugins.triggers.startup;
 
 import hudson.Extension;
 import hudson.model.*;
-import hudson.triggers.Trigger;
 import hudson.slaves.ComputerListener;
+import hudson.triggers.Trigger;
 import jenkins.model.Jenkins;
 import jenkins.model.ParameterizedJobMixIn;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterValue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jvnet.jenkins.plugins.nodelabelparameter.NodeParameterValue;
-import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
 /**
  * @author Gregory Boissinot
@@ -44,13 +42,50 @@ public class HudsonComputerListener extends ComputerListener {
 
     private final HudsonStartupService startupService = new HudsonStartupService();
 
+    private static ParametersAction getDefaultParameters(Job project) {
+        ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
+
+        if (property == null) {
+            return new ParametersAction();
+        }
+
+        List<ParameterValue> parameters = new ArrayList<>();
+        for (ParameterDefinition pd : property.getParameterDefinitions()) {
+            ParameterValue param = pd.getDefaultParameterValue();
+            if (param != null) {
+                parameters.add(param);
+            }
+        }
+
+        return new ParametersAction(parameters);
+    }
+
+    private static String getParameterType(Job project, String nodeParameterName) {
+        ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
+
+        if (property == null) {
+            return null;
+        }
+
+        for (ParameterDefinition pd : property.getParameterDefinitions()) {
+            ParameterValue param = pd.getDefaultParameterValue();
+            if (param != null) {
+                if (param.getName().equals(nodeParameterName)) {
+                    return pd.getType();
+                }
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public void onTemporarilyOnline(Computer c) {
         handleConnect("ON_CONNECT", c, null);
     }
 
     @Override
-    public void onOnline(Computer c, TaskListener listener) throws IOException, InterruptedException {
+    public void onOnline(Computer c, TaskListener listener) {
         handleConnect("ON_ONLINE", c, listener);
     }
 
@@ -91,56 +126,19 @@ public class HudsonComputerListener extends ComputerListener {
         return nodeName;
     }
 
-    private static ParametersAction getDefaultParameters(Job project) {
-        ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
-
-        if (property == null) {
-            return new ParametersAction();
-        }
-
-        List<ParameterValue> parameters = new ArrayList<ParameterValue>();
-        for (ParameterDefinition pd : property.getParameterDefinitions()) {
-            ParameterValue param = pd.getDefaultParameterValue();
-            if (param != null) {
-                parameters.add(param);
-            }
-        }
-
-        return new ParametersAction(parameters);
-    }
-
-    private static String getParameterType(Job project, String nodeParameterName) {
-        ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
-
-        if (property == null) {
-            return null;
-        }
-
-        for (ParameterDefinition pd : property.getParameterDefinitions()) {
-            ParameterValue param = pd.getDefaultParameterValue();
-            if (param != null) {
-                if (param.getName().equals(nodeParameterName)) {
-                    return pd.getType();
-                }
-            }
-        }
-
-        return null;
-    }
-
     private void processAndScheduleIfNeeded(Job project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
         Node node = c.getNode();
         if (node == null) {
             return;
         }
 
-        if (startupService.has2Schedule(startupTrigger, node) && project.isBuildable() ) {
+        if (startupService.has2Schedule(startupTrigger, node) && project.isBuildable()) {
             if (listener != null) {
                 listener.getLogger().println("[StartupTrigger] - Scheduling " + project.getName());
             }
 
             ParametersAction scheduleParameters = getDefaultParameters(project);
-            if(startupTrigger.getNodeParameterName() != null) {
+            if (startupTrigger.getNodeParameterName() != null) {
                 String parameterType = getParameterType(project, startupTrigger.getNodeParameterName());
                 String nodeName = node.getNodeName();
 
@@ -166,7 +164,7 @@ public class HudsonComputerListener extends ComputerListener {
         }
     }
 
-    private void scheduleBuild(Job job, int quietPeriod, HudsonStartupCause startupCause, ParametersAction scheduleParameters){
+    private void scheduleBuild(Job job, int quietPeriod, HudsonStartupCause startupCause, ParametersAction scheduleParameters) {
         if (job instanceof AbstractProject) {
             AbstractProject project = (AbstractProject) job;
             project.scheduleBuild(quietPeriod, startupCause, scheduleParameters);

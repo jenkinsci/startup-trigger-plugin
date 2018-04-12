@@ -25,19 +25,23 @@ package org.jvnet.hudson.plugins.triggers.startup;
  */
 
 import com.cloudbees.hudson.plugins.folder.Folder;
+import hudson.model.Computer;
 import hudson.model.FreeStyleProject;
-import org.junit.Rule;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import hudson.slaves.DumbSlave;
-import org.jvnet.hudson.test.JenkinsRule;
-
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.junit.Rule;
+import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
+
+import java.util.Objects;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class HudsonComputerListenerTest {
     @Rule
-    public JenkinsRule j = new JenkinsRule();
+    public final JenkinsRule j = new JenkinsRule();
 
     @Test
     public void testRootJobConnect() throws Exception {
@@ -51,22 +55,22 @@ public class HudsonComputerListenerTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertTrue(job.getLastSuccessfulBuild().number == 1);
+        assertEquals(job.getLastSuccessfulBuild().number, 1);
     }
 
     @Test
-     public void testRootWorkflowConnect() throws Exception {
-         // Create Workflow job with startup trigger
-         WorkflowJob job = j.jenkins.createProject(WorkflowJob.class, "job");
-         job.setDefinition(new CpsFlowDefinition("echo 'Hello World'", true));
-         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
+    public void testRootWorkflowConnect() throws Exception {
+        // Create Workflow job with startup trigger
+        WorkflowJob job = j.jenkins.createProject(WorkflowJob.class, "job");
+        job.setDefinition(new CpsFlowDefinition("echo 'Hello World'", true));
+        job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
 
-         // Create slave which node name will be slave0
-         j.createOnlineSlave();
+        // Create slave which node name will be slave0
+        j.createOnlineSlave();
 
-         // Wait for the completion of the build
-         j.waitUntilNoActivity();
-         assertTrue(job.getLastSuccessfulBuild().number == 1);
+        // Wait for the completion of the build
+        j.waitUntilNoActivity();
+        assertEquals(job.getLastSuccessfulBuild().number, 1);
     }
 
     @Test
@@ -82,7 +86,7 @@ public class HudsonComputerListenerTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertTrue(job.getLastSuccessfulBuild() == null);
+        assertNull(job.getLastSuccessfulBuild());
     }
 
     @Test
@@ -92,17 +96,17 @@ public class HudsonComputerListenerTest {
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_ONLINE"));
 
         // Create slave which node name will be slave0
-        DumbSlave slave = j.createOnlineSlave();
+        Computer computer = Objects.requireNonNull(j.createOnlineSlave().toComputer(), "Slave must be non-null");
 
         // Wait for the completion of the build (there should be none)
         j.waitUntilNoActivity();
-        assert(job.getLastSuccessfulBuild() == null);
+        assert (job.getLastSuccessfulBuild() == null);
 
         // Cycle node offline then back online
-        slave.toComputer().setTemporarilyOffline(true, null);
-        slave.toComputer().setTemporarilyOffline(false, null);
+        computer.setTemporarilyOffline(true, null);
+        computer.setTemporarilyOffline(false, null);
         j.waitUntilNoActivity();
-        assertTrue(job.getLastSuccessfulBuild().number == 1);
+        assertEquals(job.getLastSuccessfulBuild().number, 1);
     }
 
     @Test
@@ -118,7 +122,7 @@ public class HudsonComputerListenerTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertTrue(job.getLastSuccessfulBuild().number == 1);
+        assertEquals(job.getLastSuccessfulBuild().number, 1);
     }
 
     @Test
@@ -137,6 +141,6 @@ public class HudsonComputerListenerTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertTrue(job.getLastSuccessfulBuild().number == 1);
+        assertEquals(job.getLastSuccessfulBuild().number, 1);
     }
 }
