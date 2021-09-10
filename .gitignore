@@ -8,3 +8,7 @@ target
 out
 work
 
+.classpath
+.factorypath
+.project
+.settings/*

@@ -27,7 +27,6 @@ package org.jvnet.hudson.plugins.triggers.startup;
 import com.cloudbees.hudson.plugins.folder.Folder;
 import hudson.model.Computer;
 import hudson.model.FreeStyleProject;
-import hudson.slaves.DumbSlave;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.junit.Rule;

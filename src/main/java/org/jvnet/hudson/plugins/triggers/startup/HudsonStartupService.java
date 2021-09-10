@@ -51,7 +51,7 @@ public class HudsonStartupService {
             return isMaster(jobNode.getNodeName());
         }
 
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
 
         String[] triggerLabelList = triggerLabelListString.split("[ ]|[, ]|[,]");
         for (String triggerLabelString : triggerLabelList) {

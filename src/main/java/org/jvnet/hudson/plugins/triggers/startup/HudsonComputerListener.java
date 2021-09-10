@@ -42,7 +42,7 @@ public class HudsonComputerListener extends ComputerListener {
 
     private final HudsonStartupService startupService = new HudsonStartupService();
 
-    private static ParametersAction getDefaultParameters(Job project) {
+    private static ParametersAction getDefaultParameters(Job<?, ?> project) {
         ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
 
         if (property == null) {
@@ -60,7 +60,7 @@ public class HudsonComputerListener extends ComputerListener {
         return new ParametersAction(parameters);
     }
 
-    private static String getParameterType(Job project, String nodeParameterName) {
+    private static String getParameterType(Job<?, ?> project, String nodeParameterName) {
         ParametersDefinitionProperty property = (ParametersDefinitionProperty) project.getProperty(ParametersDefinitionProperty.class);
 
         if (property == null) {
@@ -95,15 +95,15 @@ public class HudsonComputerListener extends ComputerListener {
             if (listener != null) {
                 listener.getLogger().println("[StartupTrigger] - Scanning jobs for node " + getNodeName(node));
             }
-            Jenkins jenkinsInstance = Jenkins.getInstance();
+            Jenkins jenkinsInstance = Jenkins.get();
             if (jenkinsInstance != null) {
                 List<Job> jobs = jenkinsInstance.getAllItems(Job.class);
 
-                for (Job job : jobs) {
+                for (Job<?, ?> job : jobs) {
                     if (job instanceof ParameterizedJobMixIn.ParameterizedJob) {
-                        ParameterizedJobMixIn.ParameterizedJob pJob = (ParameterizedJobMixIn.ParameterizedJob) job;
+                        ParameterizedJobMixIn.ParameterizedJob<?, ?> pJob = (ParameterizedJobMixIn.ParameterizedJob<?, ?>) job;
 
-                        for (Trigger<?> trigger : pJob.getTriggers().values()) {
+                        for (Trigger<?> trigger : ((ParameterizedJobMixIn.ParameterizedJob<?, ?>) pJob).getTriggers().values()) {
                             if (trigger instanceof HudsonStartupTrigger) {
                                 HudsonStartupTrigger startupTrigger = (HudsonStartupTrigger) trigger;
 
@@ -126,7 +126,7 @@ public class HudsonComputerListener extends ComputerListener {
         return nodeName;
     }
 
-    private void processAndScheduleIfNeeded(Job project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
+    private void processAndScheduleIfNeeded(Job<?, ?> project, Computer c, TaskListener listener, HudsonStartupTrigger startupTrigger) {
         Node node = c.getNode();
         if (node == null) {
             return;
@@ -164,9 +164,9 @@ public class HudsonComputerListener extends ComputerListener {
         }
     }
 
-    private void scheduleBuild(Job job, int quietPeriod, HudsonStartupCause startupCause, ParametersAction scheduleParameters) {
+    private void scheduleBuild(Job<?, ?> job, int quietPeriod, HudsonStartupCause startupCause, ParametersAction scheduleParameters) {
         if (job instanceof AbstractProject) {
-            AbstractProject project = (AbstractProject) job;
+            AbstractProject<?, ?> project = (AbstractProject<?, ?>) job;
             project.scheduleBuild(quietPeriod, startupCause, scheduleParameters);
         } else if (job instanceof WorkflowJob) {
             WorkflowJob project = (WorkflowJob) job;
