@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+        "vscjava.vscode-java-debug",
+        "redhat.fabric8-analytics",
+        "vscjava.vscode-java-pack",
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "actuallyzach.jelly-language-support",
+        "redhat.java",
+        "davidanson.vscode-markdownlint",
+        "vscjava.vscode-maven",
+        "esbenp.prettier-vscode",
+        "vscjava.vscode-java-dependency",
+        "vscjava.vscode-java-test",
+        "redhat.vscode-xml"
+    ]
+}
