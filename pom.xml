@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>4.16</version>
+        <version>4.47</version>
         <relativePath />
     </parent>
 
     <artifactId>startup-trigger-plugin</artifactId>
-    <version>2.9.4-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
     <name>Startup Trigger</name>
     <url>https://github.com/jenkinsci/startup-trigger-plugin</url>
@@ -38,8 +38,8 @@
             <dependency>
                 <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.277.x</artifactId>
-                <version>25</version>
+                <artifactId>bom-2.387.x</artifactId>
+                <version>2179.v0884e842b_859</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -96,7 +96,7 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:git://github.com/${gitHubRepo}.git</connection>
+        <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
         <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
         <url>https://github.com/${gitHubRepo}</url>
         <tag>${scmTag}</tag>
@@ -117,9 +117,11 @@
     </pluginRepositories>
 
     <properties>
-        <jenkins.version>2.277.1</jenkins.version>
+        <revision>2.9.4</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <gitHubRepo>jenkinsci/startup-trigger-plugin</gitHubRepo>
+        <jenkins.version>2.401.3</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.level>8</java.level>
     </properties>
 </project>
