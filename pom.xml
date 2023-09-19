@@ -38,8 +38,8 @@
             <dependency>
                 <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.277.x</artifactId>
-                <version>25</version>
+                <artifactId>bom-2.387.x</artifactId>
+                <version>2179.v0884e842b_859</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -117,7 +117,7 @@
     </pluginRepositories>
 
     <properties>
-        <jenkins.version>2.277.1</jenkins.version>
+        <jenkins.version>2.401.3</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
