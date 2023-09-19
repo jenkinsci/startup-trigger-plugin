@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>startup-trigger-plugin</artifactId>
-    <version>2.9.4-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
     <name>Startup Trigger</name>
     <url>https://github.com/jenkinsci/startup-trigger-plugin</url>
@@ -117,6 +117,9 @@
     </pluginRepositories>
 
     <properties>
+        <revision>2.9.4</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <gitHubRepo>jenkinsci/startup-trigger-plugin</gitHubRepo>
         <jenkins.version>2.401.3</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
