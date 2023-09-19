@@ -57,7 +57,7 @@ public class HudsonStartupService {
         for (String triggerLabelString : triggerLabelList) {
 
             Label triggerLabel = jenkins.getLabel(triggerLabelString);
-            if (triggerLabel.contains(jobNode)) {
+            if (triggerLabel != null && triggerLabel.contains(jobNode)) {
                 return true;
             }
         }
