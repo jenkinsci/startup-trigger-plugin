@@ -35,11 +35,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
             <dependency>
-                <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.387.x</artifactId>
-                <version>2446.v2e9fd3b_d8c81</version>
+                <artifactId>bom-2.401.x</artifactId>
+                <version>2329.v078520e55c19</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
