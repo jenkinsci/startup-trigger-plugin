@@ -42,7 +42,7 @@ public class LabelExpressionTest {
         FreeStyleProject job = j.createFreeStyleProject("job");
         job.addTrigger(new HudsonStartupTrigger("slave0 && DUMMY", null, null, null));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave(Label.get("DUMMY"));
 
         // Wait for the completion of the build
@@ -57,7 +57,7 @@ public class LabelExpressionTest {
         FreeStyleProject job = j.createFreeStyleProject("job");
         job.addTrigger(new HudsonStartupTrigger("slave0 DUMMY", null, null, null));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave(Label.get("DUMMY"));
 
         // Wait for the completion of the build

@@ -9,7 +9,7 @@
 [![Project Maintenance][maintenance-shield]](https://github.com/jenkinsci/startup-trigger-plugin/commits/master)
 [![GitHub Activity][commits-shield]](https://github.com/jenkinsci/startup-trigger-plugin/commits/master)
 
-The [Startup Trigger](https://plugins.jenkins.io/startup-trigger-plugin) plugin allows you to trigger a build when Jenkins nodes (master/slave) start.
+The [Startup Trigger](https://plugins.jenkins.io/startup-trigger-plugin) plugin allows you to trigger a build when Jenkins nodes (controller/agent) start.
 
 ## Support
 
@@ -23,7 +23,7 @@ This plugin requires a jenkins restart (it will not work using install without r
 
 ### Restricted node Label
 
-By default this value is blank and the job will start (once) whenever the Jenkins master starts.  Alternatively, you can specify a node label or a space separated list of nodes labels like:
+By default this value is blank and the job will start (once) whenever the Jenkins controller starts.  Alternatively, you can specify a node label or a space separated list of nodes labels like:
 
     LABEL_A LABEL_B
 
@@ -31,7 +31,7 @@ Or a label expression:
 
     LABEL_A && LABEL_B
 
-This plugin will trigger builds when any node matching this/these labels is started.  This includes when the master is restarted, as each matching node reconnects the job will be re-executed.
+This plugin will trigger builds when any node matching this/these labels is started.  This includes when the controller is restarted, as each matching node reconnects the job will be re-executed.
 
 ### Quiet period
 
@@ -58,7 +58,7 @@ This pulldown provides a few options for what types of startup events should tri
 
 ## Development Environment
 
-This plugin seems to build successfully in all versions of Maven.  Previously releases only worked with 3.3.9, but this is no longer supported. Next release (2.9.4) will be attempted with 3.8.2.  Startup-Trigger does not build with JDK-16, but does work with [JDK-15](https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_windows-x64_bin.zip).
+This plugin seems to build successfully in all versions of Maven. The current release (2.9.4) builds with `3.9.3` and `3.9.4`.  Startup-Trigger builds with Temurin's JDK 11 and 17.
 
 [build-status]: https://ci.jenkins.io/job/Plugins/job/startup-trigger-plugin/job/master/badge/icon
 [contributors]: https://img.shields.io/github/contributors/jenkinsci/startup-trigger-plugin.svg
