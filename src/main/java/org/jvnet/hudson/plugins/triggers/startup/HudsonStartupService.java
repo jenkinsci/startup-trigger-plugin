@@ -47,7 +47,7 @@ public class HudsonStartupService {
 
     private boolean has2Schedule(String triggerLabelListString, Node jobNode) {
 
-        if (triggerLabelListString == null) { //Jobs on master has to schedule
+        if (triggerLabelListString == null) { //Jobs on controller has to schedule
             return isMaster(jobNode.getNodeName());
         }
 
@@ -66,7 +66,7 @@ public class HudsonStartupService {
     }
 
     private boolean isMaster(String nodeName) {
-        //Master node name is "", slave node name is never empty
+        //Controller node name is "", agent node name is never empty
         return nodeName.equals("");
     }
 

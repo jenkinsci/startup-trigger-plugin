@@ -48,7 +48,7 @@ public class HudsonComputerListenerTest {
         FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
@@ -64,7 +64,7 @@ public class HudsonComputerListenerTest {
         job.setDefinition(new CpsFlowDefinition("echo 'Hello World'", true));
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
@@ -79,7 +79,7 @@ public class HudsonComputerListenerTest {
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
         job.disable();
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
@@ -94,7 +94,7 @@ public class HudsonComputerListenerTest {
         FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_ONLINE"));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         Computer computer = Objects.requireNonNull(j.createOnlineSlave().toComputer(), "Slave must be non-null");
 
         // Wait for the completion of the build (there should be none)
@@ -115,7 +115,7 @@ public class HudsonComputerListenerTest {
         FreeStyleProject job = folder.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, null));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
@@ -134,7 +134,7 @@ public class HudsonComputerListenerTest {
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, null));
 
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
