@@ -38,8 +38,8 @@
             <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
             <dependency>
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.401.x</artifactId>
-                <version>2745.vc7b_fe4c876fa_</version>
+                <artifactId>bom-${jenkins.baseline}.x</artifactId>
+                <version>3875.v1df09947cde6</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -120,7 +120,9 @@
         <revision>2.9.5</revision>
         <changelist>-SNAPSHOT</changelist>
         <gitHubRepo>jenkinsci/startup-trigger-plugin</gitHubRepo>
-        <jenkins.version>2.401.3</jenkins.version>
+        <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
+        <jenkins.baseline>2.452</jenkins.baseline>
+        <jenkins.version>${jenkins.baseline}.4</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
