@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>4.73</version>
+        <version>5.9</version>
         <relativePath />
     </parent>
 
@@ -24,22 +24,13 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <id>ejpenney</id>
-            <name>Emory Penney</name>
-            <email>treadstoneit@gmail.com</email>
-            <timezone>-8</timezone>
-        </developer>
-    </developers>
-
     <dependencyManagement>
         <dependencies>
             <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
             <dependency>
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.401.x</artifactId>
-                <version>2446.v2e9fd3b_d8c81</version>
+                <artifactId>bom-${jenkins.baseline}.x</artifactId>
+                <version>4545.v56392b_7ca_7b_a_</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -119,8 +110,10 @@
     <properties>
         <revision>2.9.5</revision>
         <changelist>-SNAPSHOT</changelist>
-        <gitHubRepo>jenkinsci/startup-trigger-plugin</gitHubRepo>
-        <jenkins.version>2.401.3</jenkins.version>
+        <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
+        <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
+        <jenkins.baseline>2.479</jenkins.baseline>
+        <jenkins.version>${jenkins.baseline}.3</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
