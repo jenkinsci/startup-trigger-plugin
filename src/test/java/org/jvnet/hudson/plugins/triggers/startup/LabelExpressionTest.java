@@ -25,19 +25,17 @@ package org.jvnet.hudson.plugins.triggers.startup;
 
 import hudson.model.FreeStyleProject;
 import hudson.model.Label;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class LabelExpressionTest {
-    @Rule
-    public final JenkinsRule j = new JenkinsRule() {
-    };
+@WithJenkins
+class LabelExpressionTest {
 
     @Test
-    public void testBasicExpression() throws Exception {
+    void testBasicExpression(JenkinsRule j) throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = j.createFreeStyleProject("job");
         job.addTrigger(new HudsonStartupTrigger("slave0 && DUMMY", null, null, null));
@@ -48,11 +46,11 @@ public class LabelExpressionTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertEquals(job.getLastSuccessfulBuild().number, 1);
+        assertEquals(1, job.getLastSuccessfulBuild().number);
     }
 
     @Test
-    public void testMultiLabels() throws Exception {
+    void testMultiLabels(JenkinsRule j) throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = j.createFreeStyleProject("job");
         job.addTrigger(new HudsonStartupTrigger("slave0 DUMMY", null, null, null));
@@ -63,6 +61,6 @@ public class LabelExpressionTest {
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertEquals(job.getLastSuccessfulBuild().number, 1);
+        assertEquals(1, job.getLastSuccessfulBuild().number);
     }
 }
