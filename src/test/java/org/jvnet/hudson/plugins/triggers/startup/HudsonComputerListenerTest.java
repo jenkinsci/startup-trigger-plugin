@@ -29,57 +29,56 @@ import hudson.model.Computer;
 import hudson.model.FreeStyleProject;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 import java.util.Objects;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class HudsonComputerListenerTest {
-    @Rule
-    public final JenkinsRule j = new JenkinsRule();
+@WithJenkins
+class HudsonComputerListenerTest {
 
     @Test
-    public void testRootJobConnect() throws Exception {
+    void testRootJobConnect(JenkinsRule j) throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertEquals(job.getLastSuccessfulBuild().number, 1);
+        assertEquals(1, job.getLastSuccessfulBuild().number);
     }
 
     @Test
-    public void testRootWorkflowConnect() throws Exception {
+    void testRootWorkflowConnect(JenkinsRule j) throws Exception {
         // Create Workflow job with startup trigger
         WorkflowJob job = j.jenkins.createProject(WorkflowJob.class, "job");
         job.setDefinition(new CpsFlowDefinition("echo 'Hello World'", true));
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
         j.waitUntilNoActivity();
-        assertEquals(job.getLastSuccessfulBuild().number, 1);
+        assertEquals(1, job.getLastSuccessfulBuild().number);
     }
 
     @Test
-    public void testRootJobDisabled() throws Exception {
+    void testRootJobDisabled(JenkinsRule j) throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_CONNECT"));
         job.disable();
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
@@ -89,12 +88,12 @@ public class HudsonComputerListenerTest {
     }
 
     @Test
-    public void testRootJobOnline() throws Exception {
+    void testRootJobOnline(JenkinsRule j) throws Exception {
         // Create job with startup trigger
         FreeStyleProject job = j.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, "ON_ONLINE"));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         Computer computer = Objects.requireNonNull(j.createOnlineSlave().toComputer(), "Slave must be non-null");
 
         // Wait for the completion of the build (there should be none)
@@ -105,27 +104,27 @@ public class HudsonComputerListenerTest {
         computer.setTemporarilyOffline(true, null);
         computer.setTemporarilyOffline(false, null);
         j.waitUntilNoActivity();
-        assertEquals(job.getLastSuccessfulBuild().number, 1);
+        assertEquals(1, job.getLastSuccessfulBuild().number);
     }
 
     @Test
-    public void testFolderJob() throws Exception {
+    void testFolderJob(JenkinsRule j) throws Exception {
         // Create one level folder and a job with startup trigger
         Folder folder = j.createProject(Folder.class, "folder1");
         FreeStyleProject job = folder.createProject(FreeStyleProject.class, "job");
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, null));
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertEquals(job.getLastSuccessfulBuild().number, 1);
+        assertEquals(1, job.getLastSuccessfulBuild().number);
     }
 
     @Test
-    public void testSubFolderJob() throws Exception {
+    void testSubFolderJob(JenkinsRule j) throws Exception {
         // Create two level folder and a job with startup trigger
         Folder folder1 = j.createProject(Folder.class, "folder1");
         Folder folder2 = folder1.createProject(Folder.class, "folder2");
@@ -134,12 +133,12 @@ public class HudsonComputerListenerTest {
         job.addTrigger(new HudsonStartupTrigger("slave0", null, null, null));
 
 
-        // Create slave which node name will be slave0
+        // Create agent which node name will be slave0
         j.createOnlineSlave();
 
         // Wait for the completion of the build
         j.waitUntilNoActivity();
 
-        assertEquals(job.getLastSuccessfulBuild().number, 1);
+        assertEquals(1, job.getLastSuccessfulBuild().number);
     }
 }

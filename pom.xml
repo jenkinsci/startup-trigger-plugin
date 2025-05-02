@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>4.16</version>
+        <version>5.12</version>
         <relativePath />
     </parent>
 
     <artifactId>startup-trigger-plugin</artifactId>
-    <version>2.9.4-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
     <name>Startup Trigger</name>
     <url>https://github.com/jenkinsci/startup-trigger-plugin</url>
@@ -24,22 +24,13 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <id>ejpenney</id>
-            <name>Emory Penney</name>
-            <email>treadstoneit@gmail.com</email>
-            <timezone>-8</timezone>
-        </developer>
-    </developers>
-
     <dependencyManagement>
         <dependencies>
+            <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
             <dependency>
-                <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.277.x</artifactId>
-                <version>25</version>
+                <artifactId>bom-${jenkins.baseline}.x</artifactId>
+                <version>4669.v0e99c712a_30e</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -50,7 +41,7 @@
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>nodelabelparameter</artifactId>
-            <version>1.9.2</version>
+            <version>759.vb_b_e95db_f3251</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -96,10 +87,10 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:git://github.com/${gitHubRepo}.git</connection>
+        <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
         <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
         <url>https://github.com/${gitHubRepo}</url>
-        <tag>${scmTag}</tag>
+        <tag>startup-trigger-plugin-2.9.4</tag>
     </scm>
 
     <repositories>
@@ -117,9 +108,13 @@
     </pluginRepositories>
 
     <properties>
-        <jenkins.version>2.277.1</jenkins.version>
+        <revision>2.9.5</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
+        <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
+        <jenkins.baseline>2.479</jenkins.baseline>
+        <jenkins.version>${jenkins.baseline}.3</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.level>8</java.level>
     </properties>
 </project>

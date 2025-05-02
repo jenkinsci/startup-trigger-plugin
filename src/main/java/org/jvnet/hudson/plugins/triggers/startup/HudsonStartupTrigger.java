@@ -30,12 +30,12 @@ import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Enables the current job to be restarted when Jenkins nodes start
  * (The user is able to set a label to restrict some Jenkins nodes).
- * Without any specified label, the job is restarted when the master Jenkins
+ * Without any specified label, the job is restarted when the controller Jenkins
  * instances starts
  *
  * @author Ash Lux
@@ -98,7 +98,7 @@ public class HudsonStartupTrigger extends Trigger<BuildableItem> {
             return true;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String getDisplayName() {
             return "Build when job nodes start";
