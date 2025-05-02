@@ -16,8 +16,8 @@ jobs:
         with:
           languages: java
 
-      - name: Perform CodeQL Autobuild
-        uses: github/codeql-action/autobuild@v2
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
 
       - name: Upload CodeQL Database
         uses: github/codeql-action/upload-database@v2
