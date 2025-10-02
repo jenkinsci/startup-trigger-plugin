@@ -116,5 +116,7 @@
         <jenkins.version>${jenkins.baseline}.3</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <ban-junit4-imports.skip>false</ban-junit4-imports.skip>
     </properties>
 </project>
+
